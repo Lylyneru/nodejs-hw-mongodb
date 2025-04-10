@@ -3,6 +3,7 @@ import pino from 'pino-http';
 import cors from 'cors';
 
 import { getEnvVar } from './utils/getEnvVar.js';
+import { getContacts, getContactById } from './services/contacts.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -12,13 +13,13 @@ export const setupServer = () => {
   app.use(cors());
   app.use(express.json());
 
-  // app.use(
-  //   pino({
-  //     transport: {
-  //       target: 'pino-pretty',
-  //     },
-  //   }),
-  // );
+  app.use(
+    pino({
+      transport: {
+        target: 'pino-pretty',
+      },
+    }),
+  );
 
   app.get('/contacts', async (req, res) => {
     const data = await getContacts();
@@ -55,13 +56,13 @@ export const setupServer = () => {
 
   app.use((err, req, res, next) => {
     res.status(500).json({
-      message: error.message,
+      message: err.message,
     });
   });
 
   const port = Number(getEnvVar('PORT', 3000));
 
-  app.listen(PORT, () => {
+  app.listen(port, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 };
