@@ -1,5 +1,5 @@
 import express from 'express';
-import pino from 'pino-http';
+import { logger } from './middlewares/logger.js';
 import cors from 'cors';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
@@ -14,13 +14,7 @@ export const setupServer = () => {
   app.use(cors());
   app.use(express.json());
 
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  app.use(logger);
 
   app.use('/contacts', contactsRouter);
 
