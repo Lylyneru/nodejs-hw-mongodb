@@ -17,16 +17,25 @@ export const getContactsController = async (req, res) => {
   const paginationParams = parsePaginationParams(req.query);
   const sortParams = parseSortParams(req.query, contactSortFields);
   const filters = parseContactFilterParams(req.query);
-  const data = await getContacts({
-    ...paginationParams,
-    ...sortParams,
-    filters,
-  });
+  const { items, totalItems, totalPages, hasPreviousPage, hasNextPage } =
+    await getContacts({
+      ...paginationParams,
+      ...sortParams,
+      filters,
+    });
 
   res.json({
     status: 200,
     message: 'Successfully find contacts',
-    data,
+    data: {
+      data: items,
+      page: paginationParams.page,
+      perPage: paginationParams.perPage,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+    },
   });
 };
 
