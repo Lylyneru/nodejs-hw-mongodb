@@ -29,15 +29,20 @@ export const getContacts = async ({
   };
 };
 
-export const getContactById = (id) => ContactCollection.findOne({ _id: id });
+export const getContactById = (id, userId) =>
+  ContactCollection.findOne({ _id: id, userId });
 export const addContact = (payload) => ContactCollection.create(payload);
-export const updateContact = async (_id, payload, options = {}) => {
+export const updateContact = async (_id, userId, payload, options = {}) => {
   const { upsert } = options;
-  const rawResult = await ContactCollection.findOneAndUpdate({ _id }, payload, {
-    new: true,
-    upsert,
-    includeResultMetadata: true,
-  });
+  const rawResult = await ContactCollection.findOneAndUpdate(
+    { _id, userId },
+    payload,
+    {
+      new: true,
+      upsert,
+      includeResultMetadata: true,
+    },
+  );
 
   if (!rawResult || !rawResult.value) return null;
 
@@ -46,5 +51,5 @@ export const updateContact = async (_id, payload, options = {}) => {
     isNew: Boolean(rawResult.lastErrorObject.upserted),
   };
 };
-export const deleteContactById = (_id) =>
-  ContactCollection.findOneAndDelete({ _id });
+export const deleteContactById = (_id, userId) =>
+  ContactCollection.findOneAndDelete({ _id, userId });

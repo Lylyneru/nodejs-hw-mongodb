@@ -17,6 +17,7 @@ export const getContactsController = async (req, res) => {
   const paginationParams = parsePaginationParams(req.query);
   const sortParams = parseSortParams(req.query, contactSortFields);
   const filters = parseContactFilterParams(req.query);
+  filters.userId = req.user._id;
   const { items, totalItems, totalPages, hasPreviousPage, hasNextPage } =
     await getContacts({
       ...paginationParams,
@@ -41,8 +42,8 @@ export const getContactsController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { id } = req.params;
-
-  const data = await getContactById(id);
+  const userId = req.user._id;
+  const data = await getContactById(id, userId);
 
   if (!data) {
     throw createHttpError(404, `Contact with id=${id} not found`);
@@ -56,7 +57,8 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  const data = await addContact(req.body);
+  const { _id: userId } = req.user;
+  const data = await addContact({ ...req.body, userId });
 
   res.status(201).json({
     status: 201,
