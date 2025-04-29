@@ -10,6 +10,7 @@ import {
   updateContact,
   deleteContactById,
 } from '../services/contacts.js';
+import { saveFile } from '../utils/saveFile.js';
 
 export const getContactsController = async (req, res) => {
   console.log(req.query);
@@ -70,7 +71,13 @@ export const addContactController = async (req, res) => {
 export const patchContactController = async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;
-  const result = await updateContact(id, userId, req.body);
+  let photo = null;
+
+  if (req.file) {
+    photo = await saveFile(req.file);
+  }
+
+  const result = await updateContact(id, userId, { ...req.body, photo });
 
   if (!result) {
     throw createHttpError(404, `Contact with id=${id} not found`);
