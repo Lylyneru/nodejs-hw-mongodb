@@ -10,10 +10,9 @@ import {
   updateContact,
   deleteContactById,
 } from '../services/contacts.js';
+import { saveFile } from '../utils/saveFile.js';
 
 export const getContactsController = async (req, res) => {
-  console.log(req.query);
-
   const paginationParams = parsePaginationParams(req.query);
   const sortParams = parseSortParams(req.query, contactSortFields);
   const filters = parseContactFilterParams(req.query);
@@ -67,21 +66,44 @@ export const addContactController = async (req, res) => {
   });
 };
 
-export const patchContactController = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user._id;
-  const result = await updateContact(id, userId, req.body);
+export const patchContactController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+    let photo = null;
 
-  if (!result) {
-    throw createHttpError(404, `Contact with id=${id} not found`);
+    console.log('BODY:', req.body); // покажи, що приходить у body
+    console.log('FILE:', req.file);
+
+    if (req.file) {
+      try {
+        photo = await saveFile(req.file);
+        console.log('Photo URL:', photo);
+      } catch (error) {
+        console.error('Upload error:', error); // важливо!
+        return next(createHttpError(500, 'Error uploading photo'));
+      }
+    }
+
+    const result = await updateContact(id, userId, {
+      ...req.body,
+      ...(photo && { photo }),
+    });
+
+    if (!result) {
+      throw createHttpError(404, `Contact with id=${id} not found`);
+    }
+
+    res.json({
+      status: 200,
+      message: 'Successfully update contact',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  res.json({
-    status: 200,
-    message: 'Successfully update contact',
-    data: result.data,
-  });
 };
+
 export const deleteContactController = async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;

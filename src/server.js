@@ -7,6 +7,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import contactsRouter from './routers/contacts.js';
 import authRouter from './routers/auth.js';
 import { getEnvVar } from './utils/getEnvVar.js';
+import { UPLOAD_FILE_DIR } from './constants/index.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,6 +20,7 @@ export const setupServer = () => {
 
   app.use(logger);
 
+  app.use('/upload', express.static(UPLOAD_FILE_DIR));
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
 
