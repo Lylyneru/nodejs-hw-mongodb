@@ -12,6 +12,7 @@ export const contactSchema = Joi.object({
   contactType: Joi.string()
     .valid(...typeList)
     .required(),
+  photo: Joi.any().optional(),
 });
 
 export const updateContactSchema = Joi.object({
@@ -20,4 +21,5 @@ export const updateContactSchema = Joi.object({
   email: Joi.string().email().min(3).max(20),
   isFavourite: Joi.boolean(),
   contactType: Joi.string().valid(...typeList),
+  photo: Joi.any().optional(),
 }).min(1); // 🔥 гарантує, що хоча б одне поле буде передано

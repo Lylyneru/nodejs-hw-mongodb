@@ -10,7 +10,9 @@ import {
   updateContact,
   deleteContactById,
 } from '../services/contacts.js';
-import { saveFile } from '../utils/saveFile.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const getContactsController = async (req, res) => {
   const paginationParams = parsePaginationParams(req.query);
@@ -57,7 +59,20 @@ export const getContactByIdController = async (req, res) => {
 
 export const addContactController = async (req, res) => {
   const { _id: userId } = req.user;
-  const data = await addContact({ ...req.body, userId });
+
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToCloudinary(photo);
+  }
+  const updatePayload = {
+    ...req.body,
+  };
+  if (photoUrl) {
+    updatePayload.photo = photoUrl;
+  }
+
+  const data = await addContact({ ...updatePayload, userId });
 
   res.status(201).json({
     status: 201,
@@ -70,34 +85,31 @@ export const patchContactController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user._id;
-    let photo = null;
 
-    console.log('BODY:', req.body); // покажи, що приходить у body
-    console.log('FILE:', req.file);
+    const photo = req.file;
+    let photoUrl;
 
-    if (req.file) {
-      try {
-        photo = await saveFile(req.file);
-        console.log('Photo URL:', photo);
-      } catch (error) {
-        console.error('Upload error:', error); // важливо!
-        return next(createHttpError(500, 'Error uploading photo'));
+    if (photo) {
+      if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
       }
     }
 
-    const result = await updateContact(id, userId, {
+    const data = await updateContact(id, userId, {
       ...req.body,
-      ...(photo && { photo }),
+      photo: photoUrl,
     });
 
-    if (!result) {
+    if (!data) {
       throw createHttpError(404, `Contact with id=${id} not found`);
     }
 
     res.json({
       status: 200,
       message: 'Successfully update contact',
-      data: result,
+      data,
     });
   } catch (error) {
     next(error);
