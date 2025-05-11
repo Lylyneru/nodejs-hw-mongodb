@@ -7,8 +7,8 @@ export const contactSchema = Joi.object({
   phoneNumber: Joi.string()
     .pattern(/^\+380\d{9}$/)
     .required(),
-  email: Joi.string().email().min(3).max(20).required(),
-  isFavourite: Joi.boolean().required(),
+  email: Joi.string().email().min(3).max(20),
+  isFavourite: Joi.boolean(),
   contactType: Joi.string()
     .valid(...typeList)
     .required(),
