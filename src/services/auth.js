@@ -137,7 +137,10 @@ export const sendResetPasswordEmail = async (email) => {
     throw createHttpError(404, 'User not found!');
   }
 
-  const token = jwt.sign({ email }, jwtSecret, { expiresIn: '5m' });
+  const token = jwt.sign({ email }, jwtSecret, {
+    subject: user._id.toString(),
+    expiresIn: '5m',
+  });
 
   const resetPasswordPath = path.join(TEMPLATES_DIR, 'reset-password.html');
   const templateSource = await fs.readFile(resetPasswordPath, 'utf-8');
@@ -163,16 +166,18 @@ export const sendResetPasswordEmail = async (email) => {
 };
 
 export const resetPasswordService = async (token, newPassword) => {
-  let email;
+  let payload;
 
   try {
-    const payload = jwt.verify(token, jwtSecret);
-    email = payload.email;
+    payload = jwt.verify(token, jwtSecret);
   } catch {
     throw createHttpError(401, 'Token is expired or invalid.');
   }
 
-  const user = await findUser({ email });
+  // const user = await findUser({ email });
+  const { email, sub } = payload;
+
+  const user = await UserCollection.findOne({ _id: sub, email });
 
   if (!user) {
     throw createHttpError(404, 'User not found!');
