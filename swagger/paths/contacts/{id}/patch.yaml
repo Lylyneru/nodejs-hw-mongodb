@@ -1,0 +1,113 @@
+tags:
+  - Contacts
+summary: Update existing contact
+operationId: updateContact
+description: Updates contact information for the specified ID
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: contactId
+    required: true
+    schema:
+      type: string
+      example: '6820a5b8a8fd6a0c07bc1cf9'
+    description: The ID of the contact to be updated
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: newName
+            description: New contact name (optional)
+          phoneNumber:
+            type: string
+            example: '+380991234567'
+            description: New contact phone number (optional)
+          email:
+            type: string
+            format: email
+            example: 'new.email@example.com'
+            description: New contact email (optional)
+          photo:
+            type: string
+            example: 'https://res.cloudinary.com/your_cloud/image/upload/v1234567890/new_photo.jpg'
+            description: URL of the new contact photo (optional)
+          isFavourite:
+            type: boolean
+            example: true
+            description: New "favorite" status (optional)
+          contactType:
+            type: string
+            enum: ['personal', 'home', 'other']
+            example: 'home'
+            description: New contact type (optional)
+          example:
+            name: Updated Name
+            email: updated.email@example.com
+            isFavourite: true
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: New Name
+              description: New contact name (optional)
+            phoneNumber:
+              type: string
+              example: '+380991234567'
+              description: New contact phone number (optional)
+            email:
+              type: string
+              format: email
+              example: 'new.email@example.com'
+              description: New contact email (optional)
+            photo:
+              type: string
+              format: binary
+              description: New contact photo (optional)
+            isFavourite:
+              type: boolean
+              example: true
+              description: New "favorite" status (optional)
+            contactType:
+              type: string
+              enum: ['personal', 'home', 'other']
+              example: 'home'
+              description: New contact type (optional)
+          encoding:
+            photo:
+              contentType: image/png, image/jpeg
+          examples:
+            updateNameAndPhotoForm:
+              summary: Update name and photo (form-data)
+              value:
+                name: New Name
+                photo: 'binary data of image'
+            updateAllFieldsForm:
+              summary: Updating all possible fields (form-data)
+              value:
+                name: Updated Name
+                phoneNumber: '+380999876543'
+                email: 'another.email@example.com'
+                photo: 'binary data of another image'
+                isFavourite: false
+                contactType: 'home'
+  responses:
+    '200':
+      description: Successfully update contact
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/contact.yaml'
+    '401':
+      $ref: '../../components/responses/401.yaml'
+    '404':
+      $ref: '../../components/responses/404.yaml'
+    '500':
+      $ref: '../../components/responses/500.yaml'
