@@ -7,25 +7,18 @@ security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: contactId
+    name: id
     required: true
     schema:
       type: string
       example: '6820a5b8a8fd6a0c07bc1cf9'
       description: The ID of the contact to be deleted
-      responses:
-        '204':
-          description: Contact successfully deleted
-        '401':
-          $ref: '../../components/responses/401.yaml'
-        '404':
-          description: Contact with the specified ID not found
-          content:
-            application/json:
-              schema:
-                $ref: '../../components/responses/404.yaml'
-              example:
-                status: 404
-                message: 'Contact with id=6820a5b8a8fd6a0c07bc1cf9 not found'
-        '500':
-          $ref: '../../components/responses/500.yaml'
+responses:
+  '204':
+    description: Contact successfully deleted
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'
