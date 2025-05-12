@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import fs from 'node:fs';
-import logger from '../middlewares/logger.js';
+import { logger } from './logger.js';
 
 import { SWAGGER_PATH } from '../constants/index.js';
 
