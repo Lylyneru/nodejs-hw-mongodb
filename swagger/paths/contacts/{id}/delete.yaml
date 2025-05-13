@@ -15,7 +15,7 @@ parameters:
       description: The ID of the contact to be deleted
 responses:
   '204':
-    description: Contact successfully deleted
+    description: Contact successfully deleted (no content)
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':

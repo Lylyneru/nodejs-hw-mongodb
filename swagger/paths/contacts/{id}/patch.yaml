@@ -79,42 +79,9 @@ requestBody:
       encoding:
         photo:
           contentType: image/png, image/jpeg
-      examples:
-        updateNameAndPhotoForm:
-          summary: Update name and photo (form-data)
-          value:
-            name: New Name
-            photo: 'binary data of image'
-        updateAllFieldsForm:
-          summary: Updating all possible fields (form-data)
-          value:
-            name: Updated Name
-            phoneNumber: '+380999876543'
-            email: 'another.email@example.com'
-            photo: 'binary data of another image'
-            isFavourite: false
-            contactType: 'home'
 responses:
   '200':
-    description: Successfully update contact
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - status
-            - message
-            - data
-          properties:
-            status:
-              type: integer
-              example: 200
-            message:
-              type: string
-              example: Successfully update contact
-            data:
-              type: object
-          $ref: '../../../components/schemas/contact.yaml'
+    $ref: '../../../components/responses/200.yaml'
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':
