@@ -12,8 +12,8 @@ tags:
   - name: Auth
     description: Auth operations
 servers:
-  - url: https://nodejs-hw-mongodb-6-trzp.onrender.com/api-docs
   - url: http://localhost:3000
+  - url: https://nodejs-hw-mongodb-6-trzp.onrender.com/api-docs
 paths:
   /contacts:
     post:
