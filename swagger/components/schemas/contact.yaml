@@ -7,7 +7,7 @@ required:
   - photo
   - isFavourite
   - contactType
-  - userId
+  # - userId
 properties:
   _id:
     description: "Contact's id"
@@ -37,7 +37,7 @@ properties:
     description: "Contact's type"
     type: string
     enum: ['personal', 'home', 'other']
-  userId:
-    description: "Contact's parent id"
-    type: string
-    example: 682098550c475ecc03ef107a
+  # userId:
+  #   description: "Contact's parent id"
+  #   type: string
+  #   example: 682098550c475ecc03ef107a
