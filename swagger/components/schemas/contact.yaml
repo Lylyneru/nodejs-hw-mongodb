@@ -3,11 +3,8 @@ required:
   - _id
   - name
   - phoneNumber
-  - email
-  - photo
-  - isFavourite
   - contactType
-  # - userId
+  - userId
 properties:
   _id:
     description: "Contact's id"
@@ -28,7 +25,6 @@ properties:
   photo:
     description: "Link to contact's photo"
     type: string
-    format: binary
     example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
   isFavourite:
     description: 'Whether is contact isFavourit'
@@ -38,7 +34,7 @@ properties:
     description: "Contact's type"
     type: string
     enum: ['personal', 'home', 'other']
-  # userId:
-  #   description: "Contact's parent id"
-  #   type: string
-  #   example: 682098550c475ecc03ef107a
+  userId:
+    description: "Contact's parent id"
+    type: string
+    example: 682098550c475ecc03ef107a
