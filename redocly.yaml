@@ -13,6 +13,6 @@ theme:
       main: '#32329f'
   generateCodeSamples:
     languages:
-      - lang: curl
+      # - lang: curl
       - lang: Node.js
       - lang: JavaScript
