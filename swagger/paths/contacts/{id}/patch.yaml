@@ -16,36 +16,6 @@ parameters:
 requestBody:
   required: true
   content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          name:
-            type: string
-            example: newName
-            description: New contact name (optional)
-          phoneNumber:
-            type: string
-            example: '+380991234567'
-            description: New contact phone number (optional)
-          email:
-            type: string
-            format: email
-            example: 'new.email@example.com'
-            description: New contact email (optional)
-          photo:
-            type: string
-            example: 'https://res.cloudinary.com/your_cloud/image/upload/v1234567890/new_photo.jpg'
-            description: URL of the new contact photo (optional)
-          isFavourite:
-            type: boolean
-            example: true
-            description: New "favorite" status (optional)
-          contactType:
-            type: string
-            enum: ['personal', 'home', 'other']
-            example: 'home'
-            description: New contact type (optional)
     multipart/form-data:
       schema:
         type: object
@@ -53,29 +23,23 @@ requestBody:
           name:
             type: string
             example: New Name
-            description: New contact name (optional)
           phoneNumber:
             type: string
             example: '+380991234567'
-            description: New contact phone number (optional)
           email:
             type: string
             format: email
             example: 'new.email@example.com'
-            description: New contact email (optional)
-          photo:
-            type: string
-            format: binary
-            description: New contact photo (optional)
           isFavourite:
             type: boolean
             example: true
-            description: New "favorite" status (optional)
           contactType:
             type: string
             enum: ['personal', 'home', 'other']
             example: 'home'
-            description: New contact type (optional)
+          photo:
+            type: string
+            format: binary
       encoding:
         photo:
           contentType: image/png, image/jpeg
