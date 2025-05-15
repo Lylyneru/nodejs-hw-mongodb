@@ -14,7 +14,7 @@
       "url": "http://localhost:3000"
     },
     {
-      "url": "https://nodejs-hw-mongodb-6-trzp.onrender.com/api-docs"
+      "url": "https://nodejs-hw-mongodb-6-trzp.onrender.com"
     }
   ],
   "tags": [
@@ -431,10 +431,8 @@
           "_id",
           "name",
           "phoneNumber",
-          "email",
-          "photo",
-          "isFavourite",
-          "contactType"
+          "contactType",
+          "userId"
         ],
         "properties": {
           "_id": {
@@ -460,7 +458,6 @@
           "photo": {
             "description": "Link to contact's photo",
             "type": "string",
-            "format": "binary",
             "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
           },
           "isFavourite": {
@@ -476,6 +473,11 @@
               "home",
               "other"
             ]
+          },
+          "userId": {
+            "description": "Contact's parent id",
+            "type": "string",
+            "example": "682098550c475ecc03ef107a"
           }
         }
       }
